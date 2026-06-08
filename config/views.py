@@ -16,7 +16,6 @@ from .serializers import (
 )
 
 
-# Только GET
 class PartnerViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Partner.objects.all()
     serializer_class = PartnerSerializer
@@ -32,11 +31,8 @@ class PriceViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PriceSerializer
 
 
-# GET + POST
 class ZaiavkaViewSet(
     CreateModelMixin,
-    ListModelMixin,
-    RetrieveModelMixin,
     viewsets.GenericViewSet
 ):
     queryset = Zaiavka.objects.all()

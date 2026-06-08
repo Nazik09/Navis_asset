@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 
 class Partner(models.Model):
     title = models.CharField(max_length=100)
@@ -28,7 +30,8 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
-    
+
+
 class News(models.Model):
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='news/')
@@ -37,16 +40,26 @@ class News(models.Model):
 
     def __str__(self):
         return self.title
-    
+
+
 class Otzyvy(models.Model):
     name = models.CharField(max_length=100)
     text = models.TextField()
-    rating = models.IntegerField()
+
+    rating = models.IntegerField(
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(5)
+        ]
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='reviews/')
 
     def __str__(self):
         return self.name
-    
+
+
 class Price(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -54,4 +67,3 @@ class Price(models.Model):
 
     def __str__(self):
         return self.title
-
