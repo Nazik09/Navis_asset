@@ -1,6 +1,28 @@
 services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: navis_db
+      POSTGRES_USER: navis_user
+      POSTGRES_PASSWORD: navis_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   web:
     build: .
+    command: >
+      sh -c "
+      python manage.py migrate &&
+      gunicorn navis.wsgi:application --bind 0.0.0.0:8000
+      "
     ports:
       - "8000:8000"
-      
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
